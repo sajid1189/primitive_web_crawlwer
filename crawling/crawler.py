@@ -25,7 +25,7 @@ class Crawler:
                 text = soup.get_all_p_text()
                 self.content.append({'content': text, 'url': url})
                 for link in soup.get_absolute_internal_links():
-                    if (link not in self.visited) and not self.is_media_file(link):
+                    if (link not in self.visited) and (not self.is_media_file(link)):
                         self.queue.enqueue(link)
         return self.content
 
@@ -33,6 +33,6 @@ class Crawler:
     def is_media_file(url):
         media_identifier_tokens = ['.jpg', '.png', 'jpeg', '.js', '.css', '.gif']
         for token in media_identifier_tokens:
-            if token in url:
+            if token in url.lower():
                 return True
         return False

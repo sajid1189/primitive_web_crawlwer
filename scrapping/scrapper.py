@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import re
 from urlparse import urljoin
 
@@ -13,7 +16,7 @@ class Soup:
             response = requests.get(url)
             self.soup = BeautifulSoup(response.content, 'html.parser')
         except Exception as e:
-            print e
+            print 'exception thrown at :{}'.format(url)
             self.soup = None
         self.external_links = set()
         self.internal_links = set()

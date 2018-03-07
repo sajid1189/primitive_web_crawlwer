@@ -19,15 +19,20 @@ class Stack:
 class Queue:
     def __init__(self):
         self.queue = []
+        self.unique_items = set()
 
     def enqueue(self, val):
-        self.queue.insert(0, val)
+        if val not in self.unique_items:
+            self.queue.insert(0, val)
+            self.unique_items.add(val)
 
     def dequeue(self):
         if self.is_empty():
             return None
         else:
-            return self.queue.pop()
+            val = self.queue.pop()
+            self.unique_items.remove(val)
+            return val
 
     def is_empty(self):
         return len(self.queue) == 0
