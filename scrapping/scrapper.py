@@ -5,13 +5,15 @@ import requests
 from bs4 import BeautifulSoup
 
 
-class WebPage:
+class Soup:
     def __init__(self, url):
         self.url = url
-        response = requests.get(url)
-        if response.status_code == 200:
+        print 'scrapping: ', url
+        try:
+            response = requests.get(url)
             self.soup = BeautifulSoup(response.content, 'html.parser')
-        else:
+        except Exception as e:
+            print e
             self.soup = None
         self.external_links = set()
         self.internal_links = set()
@@ -60,4 +62,3 @@ class WebPage:
             for link in self.get_internal_links():
                 self.absolute_internal_links.add(urljoin(self.url, link))
         return self.absolute_internal_links
-
