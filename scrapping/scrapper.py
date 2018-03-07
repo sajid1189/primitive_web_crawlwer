@@ -1,4 +1,5 @@
 import re
+from urlparse import urljoin
 
 import requests
 from bs4 import BeautifulSoup
@@ -6,14 +7,16 @@ from bs4 import BeautifulSoup
 
 class WebPage:
     def __init__(self, url):
+        self.url = url
         response = requests.get(url)
         if response.status_code == 200:
             self.soup = BeautifulSoup(response.content, 'html.parser')
         else:
             self.soup = None
-        self.all_external_links = []
-        self.all_internal_links = []
-        self.all_links = []
+        self.external_links = set()
+        self.internal_links = set()
+        self.absolute_internal_links = set()
+        self.links = set()
 
     def get_pretty_soup(self):
         if self.soup:
@@ -33,17 +36,28 @@ class WebPage:
         return p_contents
 
     def get_external_links(self):
-        if not self.all_external_links:
+        if not self.external_links:
             for link in self.get_all_links():
                 if 'http' in link.get('href'):
-                    self.all_external_links.append(link.get('href'))
-        return self.all_external_links
+                    self.external_links.add(link.get('href'))
+        return self.external_links
 
     def get_internal_links(self):
-        return
+        if not self.internal_links:
+            for link in self.get_all_links():
+                if 'http' not in link.get('href'):
+                    self.internal_links.add(link.get('href'))
+        return self.internal_links
 
     def get_all_links(self):
         if self.soup:
-            if not self.all_links:
-                self.all_links = self.soup.find_all('a', href=True)
-        return self.all_links
+            if not self.links:
+                self.links = set(self.soup.find_all('a', href=True))
+        return self.links
+
+    def get_absolute_internal_links(self):
+        if not self.absolute_internal_links:
+            for link in self.get_internal_links():
+                self.absolute_internal_links.add(urljoin(self.url, link))
+        return self.absolute_internal_links
+
