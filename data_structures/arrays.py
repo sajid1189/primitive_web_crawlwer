@@ -1,3 +1,5 @@
+from Queue import Queue as SysQueue
+
 
 class Stack:
     def __init__(self):
@@ -36,3 +38,26 @@ class Queue:
 
     def is_empty(self):
         return len(self.queue) == 0
+
+    def size(self):
+        return len(self.queue)
+
+
+class ThreadSafeQueue(SysQueue):
+
+    def __init__(self):
+        SysQueue.__init__(self)
+        self.unique_items = set()
+
+    def put(self, val):
+        if val not in self.unique_items:
+            SysQueue.put(self, val)
+            self.unique_items.add(val)
+
+    def get(self):
+        if self.empty():
+            return None
+        else:
+            val = SysQueue.get(self)
+            self.unique_items.remove(val)
+            return val
