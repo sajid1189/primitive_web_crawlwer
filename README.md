@@ -3,6 +3,6 @@
 How to use:
 instanitalte the Crawler instance with the staring web page as an argument. Then call the bfs metho of the instance e.g.,
 
-from crawling.crawler import Crawler \n
-cr = Crawler('https://google.de/') \n
+from crawling.crawler import Crawler <br>
+cr = Crawler('https://google.de/') <br> 
 c = cr.bfs()
