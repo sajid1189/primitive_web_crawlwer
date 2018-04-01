@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 class Soup:
     def __init__(self, url):
         self.url = url
-        print 'scrapping: ', url
+        # print 'scrapping: ', url
 
         try:
             response = requests.get(url)
